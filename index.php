@@ -6,6 +6,8 @@
 // Set the site ID if required.  This must be done before any database
 // access is attempted.
 
+// New comment added. 
+
 if (!empty($_GET['site']))
     $site_id = $_GET['site'];
 else if (is_dir("sites/" . $_SERVER['HTTP_HOST']))
