@@ -110,8 +110,12 @@ form {
 
 <script type="text/javascript" src="<?php echo $GLOBALS['webroot'] ?>/library/js/jquery-1.2.2.min.js"></script>
 
-<script language="JavaScript">
+<?php if ($popup) { ?>
+<script type="text/javascript" src="../../../library/topdialog.js"></script>
+<?php } ?>
 
+<script language="JavaScript">
+<?php if ($popup) require($GLOBALS['srcdir'] . "/restoreSession.php"); ?>
 // This is called when forward or backward paging is done.
 //
 function submitList(offset) {
@@ -503,7 +507,8 @@ $(document).ready(function(){
     $(".oneresult").click(function() { SelectPatient(this); });
     // $(".event").dblclick(function() { EditEvent(this); });
     <?php if($print_patients) { ?>
-      window.print();
+      var win = top.printLogPrint ? top : opener.top;
+      win.printLogPrint(window);
     <?php } ?>
 });
 
@@ -533,4 +538,3 @@ else {
 
 </body>
 </html>
-
