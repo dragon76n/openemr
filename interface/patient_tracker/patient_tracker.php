@@ -223,17 +223,7 @@ $appointments = sortAppointments( $appointments, 'time' );
                 # Collect appt date and set up squashed date for use below
                 $date_appt = $appointment['pc_eventDate'];
                 $date_squash = str_replace("-","",$date_appt);
-    
-                if ($appointment['pc_recurrtype'] != 0) {
-                        # TODO: Note this block of code can likely be removed when the appointment recursion bug has been fixed.
-                        # don't show if date has been excluded
-                        # example of pc_recurrspec having "exdate" of "20150527,20150528,";
-                        $recurrent_info = unserialize($appointment['pc_recurrspec']);
-                        if (preg_match("/$date_squash/",$recurrent_info['exdate'])) {
-                                continue;
-                        }
-                }
-                
+
                 # Collect variables and do some processing
                 $docname  = $appointment['ulname'] . ', ' . $appointment['ufname'] . ' ' . $appointment['umname'];
                 if (strlen($docname)<= 3 ) continue;
@@ -241,6 +231,7 @@ $appointments = sortAppointments( $appointments, 'time' );
                 $appt_enc = $appointment['encounter'];
                 $appt_eid = (!empty($appointment['eid'])) ? $appointment['eid'] : $appointment['pc_eid'];
                 $appt_pid = (!empty($appointment['pid'])) ? $appointment['pid'] : $appointment['pc_pid'];
+                if ($appt_pid ==0 ) continue; // skip when $appt_pid = 0, since this means it is not a patient specific appt slot
                 $status = (!empty($appointment['status'])) ? $appointment['status'] : $appointment['pc_apptstatus'];
                 $appt_room = (!empty($appointment['room'])) ? $appointment['room'] : $appointment['pc_room'];
                 $appt_time = (!empty($appointment['appttime'])) ? $appointment['appttime'] : $appointment['pc_startTime'];

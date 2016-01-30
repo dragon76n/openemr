@@ -91,6 +91,7 @@ else {
 // List of user specific tabs and globals
 $USER_SPECIFIC_TABS = array('Appearance',
                             'Locale',
+                            'Features',
                             'Calendar',
                             'Connectors');
 $USER_SPECIFIC_GLOBALS = array('default_top_pane',
@@ -103,6 +104,7 @@ $USER_SPECIFIC_GLOBALS = array('default_top_pane',
                                'us_weight_format',
                                'date_display_format',
                                'time_display_format',
+                               'ledger_begin_date',
                                'calendar_view_type',
                                'event_color',
                                'pat_trkr_timer',
@@ -697,7 +699,7 @@ $GLOBALS_METADATA = array(
         '0' => xl('08/05{{CMS 1500 format date revision setting in globals}}'),
         '1' => xl('02/12{{CMS 1500 format date revision setting in globals}}'),
       ),
-      '0',                              // default
+      '1',                              // default
       xl('This specifies which revision of the form the billing module should generate')
     ),
      
@@ -753,6 +755,20 @@ $GLOBALS_METADATA = array(
       xl('This specifies the Printing of the Custom End of Day Report grouped Provider or allow the Printing of Totals Only')
     ),
 
+    'ledger_begin_date' => array(
+      xl('Beginning Date for Ledger Report'),
+      array(
+        'Y1' => xl('One Year Ago'),
+        'Y2' => xl('Two Years Ago'),
+        'M6' => xl('Six Months Ago'),
+        'M3' => xl('Three Months Ago'),
+        'M1' => xl('One Month Ago'),
+        'D1' => xl('One Day Ago'),        
+      ),                       
+      'Y1',                     // default = One Year
+      xl('This is the Beginning date for the Ledger Report.')
+    ),
+	
   ),
     // E-Sign Tab
     //
@@ -1170,6 +1186,17 @@ $GLOBALS_METADATA = array(
       xl('Must be empty if SMTP authentication is not used.')
     ),
 
+    'SMTP_SECURE' => array(
+      xl('SMTP Security Protocol'),
+      array(
+        '' => xl('None'),
+        'ssl'  => 'SSL',
+        'tls'  => 'TLS'
+      ),
+      '',
+      xl('SMTP security protocol to connect with. Required by some servers such as gmail.')
+    ),
+	
     'EMAIL_NOTIFICATION_HOUR' => array(
       xl('Email Notification Hours'),
       'num',                            // data type
@@ -1478,6 +1505,17 @@ $GLOBALS_METADATA = array(
       xl('Billing log setting to append or overwrite the log file.')
     ),
 
+    'gbl_print_log_option' => array(
+      xl('Printing Log Option'),
+      array(
+        '0' => xl('No logging'),
+        '1' => xl('Hide print feature'),
+        '2' => xl('Log entire document'),
+      ),
+      '0',                               // default
+      xl('Individual pages can override 2nd and 3rd options by implementing a log message.')
+    ),
+
   ),
 
   // Miscellaneous Tab
@@ -1650,6 +1688,13 @@ $GLOBALS_METADATA = array(
       'text',                           // data type
       'https://your_web_site.com/openemr/patients',
       xl('Website link for the Onsite Patient Portal.')
+    ),
+
+    'portal_onsite_document_download' => array(
+      xl('Enable Onsite Patient Portal Document Download'),
+      'bool',                           // data type
+      '1',
+      xl('Enables the ability to download documents in the Onsite Patient Portal by the user.')
     ),
     
     'portal_offsite_enable' => array(

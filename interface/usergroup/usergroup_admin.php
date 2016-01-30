@@ -1,4 +1,25 @@
 <?php
+/**
+ * This script Assign acl 'Emergency login'.
+ *
+ * Copyright (C) 2015 Roberto Vasquez <robertogagliotta@gmail.com>
+ *
+ * LICENSE: This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://opensource.org/licenses/gpl-license.php>;.
+ *
+ * @package OpenEMR
+ * @author  Roberto Vasquez <robertogagliotta@gmail.com>
+ * @link    http://www.open-emr.org
+ */
+
 require_once("../globals.php");
 require_once("../../library/acl.inc");
 require_once("$srcdir/sql.inc");
@@ -178,6 +199,11 @@ if (isset($_POST["privatemode"]) && $_POST["privatemode"] =="user_admin") {
 	$erxrole = formData('erxrole','P');
 	sqlStatement("update users set newcrop_user_role = '$erxrole' where id = {$_POST["id"]}");
 
+	  if ($_POST["physician_type"]) {
+		$physician_type = formData('physician_type');
+		sqlStatement("update users set physician_type = '$physician_type' where id = {$_POST["id"]}");
+	  }
+	  
       if (isset($phpgacl_location) && acl_check('admin', 'acl')) {
         // Set the access control group of user
         $user_data = mysql_fetch_array(sqlStatement("select username from users where id={$_POST["id"]}"));
@@ -227,6 +253,7 @@ if (isset($_POST["mode"])) {
             "', federaltaxid = '"  . trim(formData('federaltaxid' )) .
             "', state_license_number = '"  . trim(formData('state_license_number' )) .
             "', newcrop_user_role = '"  . trim(formData('erxrole' )) .
+			"', physician_type = '"  . trim(formData('physician_type' )) .
             "', authorized = '"    . trim(formData('authorized'   )) .
             "', info = '"          . trim(formData('info'         )) .
             "', federaldrugid = '" . trim(formData('federaldrugid')) .
@@ -449,8 +476,8 @@ foreach ($result4 as $iter) {
   print "<tr height=20  class='text' style='border-bottom: 1px dashed;'>
 		<td class='text'><b><a href='user_admin.php?id=" . $iter{"id"} .
     "' class='iframe_medium' onclick='top.restoreSession()'><span>" . $iter{"username"} . "</span></a></b>" ."&nbsp;</td>
-	<td><span class='text'>" .$iter{"fname"} . ' ' . $iter{"lname"}."</span>&nbsp;</td>
-	<td><span class='text'>" .$iter{"info"} . "</span>&nbsp;</td>
+	<td><span class='text'>" . attr($iter{"fname"}) . ' ' . attr($iter{"lname"}) ."</span>&nbsp;</td>
+	<td><span class='text'>" . attr($iter{"info"}) . "</span>&nbsp;</td>
 	<td align='left'><span class='text'>" .$iter{"authorized"} . "</span>&nbsp;</td>";
   print "<td><!--<a href='usergroup_admin.php?mode=delete&id=" . $iter{"id"} .
     "' class='link_submit'>[Delete]</a>--></td>";
